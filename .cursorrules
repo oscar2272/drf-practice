@@ -1,0 +1,55 @@
+--------------------------
+****매우 매우 중요*****
+- 코드에 한글로 생성된 주석등 내용에 유니코드가 깨졌을 경우 다시 수정해야 함
+
+--------------------------
+Django REST Framework (DRF)
+**DRF의 ViewSet과 Generic Views**를 사용하여 RESTful API를 구현하고, 간단한 로직에는 **APIView**를 선호합니다.
+Django ORM을 활용하여 데이터베이스 작업을 처리하고, 성능이 중요한 경우가 아니면 원시 SQL 쿼리는 피합니다.
+DRF의 내장 인증 클래스(JWT, Token 등)와 권한 클래스를 활용하여 API 인증과 권한을 관리합니다.
+DRF의 Serializer를 사용하여 데이터 직렬화/역직렬화 및 유효성 검사를 처리합니다.
+API 아키텍처는 RESTful 원칙을 준수하며, 리소스 중심의 설계를 지향합니다.
+미들웨어와 커스텀 권한 클래스를 통해 인증, 로깅, 캐싱과 같은 교차 관심사를 처리합니다.
+
+TDD 방식으로 개발(flake8, django test suite)
+모든 코드는 테스트 코드를 작성해야 함
+docker compose를 통해 실행
+  -> `docker-compose run --rm app sh -c "python manage.py test"` 명령어로 테스트 실행
+
+오류 처리 및 유효성 검사
+DRF의 예외 처리 시스템을 활용하여 일관된 오류 응답을 제공합니다.
+Serializer의 유효성 검사 메커니즘을 활용하여 데이터 검증을 수행합니다.
+커스텀 예외 핸들러를 구현하여 비즈니스 로직의 예외를 처리합니다.
+API 응답은 일관된 형식(예: {status, message, data})을 유지합니다.
+DRF 시그널을 통해 비즈니스 로직, 오류 처리, 로깅을 분리합니다.
+
+의존성
+Django REST Framework
+JWT 또는 Simple JWT (토큰 기반 인증)
+drf-yasg 또는 drf-spectacular (API 문서화)
+Celery (비동기 작업 처리) > 꼭필요시에 사용
+Redis (캐싱 및 작업 큐) > 꼭필요시에 사용
+PostgreSQL (프로덕션 데이터베이스)
+
+DRF-specific 지침
+Serializer를 사용하여 데이터 변환과 유효성 검사를 처리합니다.
+ViewSet과 Router를 활용하여 표준 CRUD 작업을 자동화합니다.
+API 버저닝을 통해 하위 호환성을 유지합니다.
+DRF의 필터링, 정렬, 페이지네이션 기능을 적극 활용합니다.
+API 문서화 도구(drf-yasg, drf-spectacular)를 사용하여 자동화된 API 문서를 제공합니다.
+DRF의 테스트 도구를 활용하여 API 엔드포인트를 테스트합니다.
+throttling을 구현하여 API 사용량을 제한합니다.
+
+성능 최적화
+select_related 및 prefetch_related를 사용하여 N+1 문제를 해결합니다.
+DRF의 캐싱 메커니즘을 활용하여 자주 요청되는 데이터를 캐시합니다.
+데이터베이스 쿼리 최적화 및 인덱싱을 통해 응답 시간을 개선합니다.
+**비동기 작업(Celery)**을 활용하여 무거운 처리를 백그라운드로 이동합니다.
+API 응답 압축과 최적화를 통해 네트워크 부하를 줄입니다.
+
+주요 규칙
+RESTful API 설계 원칙을 준수합니다.
+API 보안과 성능을 최우선으로 고려합니다.
+일관된 API 응답 형식과 에러 처리를 유지합니다.
+API 버저닝을 통해 변경 관리를 효과적으로 수행합니다.
+철저한 API 문서화와 테스트를 실시합니다.

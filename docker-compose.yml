@@ -1,0 +1,23 @@
+# docker-compose 버전
+version: "3.9"
+
+# 서비스 정의
+services:
+  # 서비스 이름
+  app:
+    # 이미지 빌드
+    build:
+      # docker build 시 사용되는 디렉토리 지정
+      # use the current directory
+      context: .
+      args:
+        # 개발 환경 설정(production 환경 설정 시 false로 변경)
+        - DEV=true
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    # 볼륨 마운트(로컬 app - 컨테이너 내부 app에 마운트)
+    volumes:
+      - ./app:/app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
