@@ -1,7 +1,7 @@
 ### Dockerfile(docker build 시 사용되는파일)
 
 # 파이썬 이미지 사용
-FROM python:3.13
+FROM python:3.13-alpine
 
 # 메인테이너(관리자) 정보
 LABEL maintainer="oscar2272"
@@ -22,12 +22,16 @@ EXPOSE 8000
 # 가상환경 생성 및 종속성 설치
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+      build-base postgresql-dev musl-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     # dev 환경이면 dev.txt 추가 설치
     if [ $DEV = "true" ]; \
       then /py/bin/pip install -r /tmp/requirements.dev.txt; \
     fi && \
     rm -rf /tmp && \
+    apk del .tmp-build-deps && \
     # docker 컨테이너 내부에서 사용자 생성
     adduser \
       --disabled-password \
